@@ -76,12 +76,6 @@ nav a[aria-current]{background:rgba(255,255,255,.16);color:#fff;box-shadow:inset
 .post p{margin:0 0 14px;font-size:1.05rem}
 
 .ic{width:22px;height:22px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.links{display:flex;flex-wrap:wrap;gap:12px}
-.info .links{grid-column:1/-1}
-.contact .links{margin-top:32px}
-.lnk{display:inline-flex;align-items:center;gap:10px;padding:12px 20px;border-radius:4px;color:#fff;text-decoration:none;font-weight:600}
-.lnk:hover{filter:brightness(1.15)}
-.lnk.call{background:#1f6f43}.lnk.tg{background:#1b7fb3}.lnk.ig{background:#b02a7a}.lnk.fb{background:#1565d8}
 footer .foot{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .flinks{display:flex;gap:10px}
 .flinks a{display:inline-flex;width:42px;height:42px;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.4);border-radius:50%;color:#dbe5f5}
