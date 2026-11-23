@@ -80,3 +80,11 @@ footer .foot{display:flex;align-items:center;justify-content:space-between;gap:1
 .flinks{display:flex;gap:10px}
 .flinks a{display:inline-flex;width:42px;height:42px;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.4);border-radius:50%;color:#dbe5f5}
 .flinks a:hover{background:rgba(255,255,255,.15);color:#fff}
+
+.lang{display:flex;margin-left:auto}
+.lang a{padding:6px 11px;border:1px solid rgba(255,255,255,.4);color:#dbe5f5;text-decoration:none;font-size:.85rem;font-weight:600;line-height:1.2}
+.lang a+a{margin-left:-1px}
+.lang a:first-child{border-radius:4px 0 0 4px}
+.lang a:last-child{border-radius:0 4px 4px 0}
+.lang a:hover{background:rgba(255,255,255,.14);color:#fff}
+.lang a[aria-current]{background:var(--gold);border-color:var(--gold);color:#16120a;position:relative}

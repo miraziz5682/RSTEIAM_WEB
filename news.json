@@ -3,6 +3,10 @@
     "id": 1,
     "date": "11.11.2026",
     "title": "Filial veb-sayti işga tuşirildi",
-    "text": "Bu yerda filial yangiliklari va e'lonlari e'lon qilinadi."
+    "text": "Bu yerda filial yangiliklari va e'lonlari e'lon qilinadi.",
+    "title_ru": "Веб-сайт филиала запущен",
+    "text_ru": "Здесь публикуются новости и объявления филиала.",
+    "title_en": "The branch website has been launched",
+    "text_en": "News and announcements of the branch are published here."
   }
 ]
