@@ -22,9 +22,9 @@ def excerpt(t):
     return first if len(first) <= 160 else first[:157].rsplit(" ", 1)[0] + "..."
 
 def card(n):
-    thumb = f'<img class="thumb" src="{n["photo"]}" alt="">' if n.get("photo") else ""
+    thumb = f'<img class="thumb" src="/{n["photo"]}" alt="">' if n.get("photo") else ""
     return (f'<article>\n<time datetime="{iso(n["date"])}">{n["date"]}</time>\n'
-            f'<div><h3><a href="yangilik-{n["id"]}.html">{esc(n["title"])}</a></h3>'
+            f'<div><h3><a href="/yangiliklar/{n["id"]}/">{esc(n["title"])}</a></h3>'
             f'<p>{esc(excerpt(n["text"]))}</p>{thumb}</div>\n</article>')
 
 def replace_block(path, inner):
@@ -35,24 +35,26 @@ def replace_block(path, inner):
 
 def build():
     items = sorted(load(), key=lambda n: (iso(n["date"]), n["id"]), reverse=True)
-    replace_block(ROOT / "yangiliklar.html", "\n".join(card(n) for n in items))
+    nd = ROOT / "yangiliklar"
+    replace_block(nd / "index.html", "\n".join(card(n) for n in items))
     replace_block(ROOT / "index.html", "\n".join(card(n) for n in items[:3]))
-    s = (ROOT / "yangiliklar.html").read_text("utf-8")
+    s = (nd / "index.html").read_text("utf-8")
     head, tail = s[:s.index("<main>") + 6], s[s.index("</main>"):]
     keep = set()
     for n in items:
-        img = f'<img src="{n["photo"]}" alt="{esc(n["title"])}">\n' if n.get("photo") else ""
+        img = f'<img src="/{n["photo"]}" alt="{esc(n["title"])}">\n' if n.get("photo") else ""
         body = (f'\n<div class="pagehead"><div class="wrap"><h1>{esc(n["title"])}</h1></div></div>\n'
                 f'<section>\n<div class="wrap post">\n<time datetime="{iso(n["date"])}">{n["date"]}</time>\n'
-                f'{img}{paras(n["text"])}<a class="more" href="yangiliklar.html">Barça yangiliklar</a>\n'
+                f'{img}{paras(n["text"])}<a class="more" href="/yangiliklar/">Barça yangiliklar</a>\n'
                 f'</div>\n</section>\n')
         h = head.replace("<title>Yangiliklar |", f"<title>{esc(n['title'])} |")
-        name = f"yangilik-{n['id']}.html"
-        keep.add(name)
-        (ROOT / name).write_text(h + body + tail, "utf-8")
-    for f in ROOT.glob("yangilik-*.html"):
-        if f.name not in keep:
-            f.unlink()
+        d = nd / str(n["id"])
+        d.mkdir(exist_ok=True)
+        keep.add(d.name)
+        (d / "index.html").write_text(h + body + tail, "utf-8")
+    for d in nd.iterdir():
+        if d.is_dir() and d.name.isdigit() and d.name not in keep:
+            shutil.rmtree(d)
     return items
 
 def put_photo(src, n):
@@ -89,7 +91,7 @@ def add():
         item["photo"] = put_photo(photo, n)
     items.append(item)
     DB.write_text(json.dumps(items, ensure_ascii=False, indent=2), "utf-8")
-    print(f"\nHostingga yuklang: yangilik-{n}.html, yangiliklar.html, index.html" +
+    print(f"\nHostingga yuklang: yangiliklar/{n}/, yangiliklar/index.html, index.html" +
           (f", {item['photo']}" if photo else ""))
 
 if __name__ == "__main__":
