@@ -4,7 +4,7 @@ from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).parent
-FACEBOOK = "FACEBOOK_HAVOLA"            # Facebook sahifa havolasini shu yerga yozing
+FACEBOOK = "https://www.facebook.com/profile.php?id=61596552209427"
 TELEGRAM = "https://t.me/rsteiam_tvf"
 INSTAGRAM = "https://www.instagram.com/rsteiam_tvf/"
 TEL, PHONE = "tel:+998555159645", "55-515-96-45"
