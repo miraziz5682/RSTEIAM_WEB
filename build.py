@@ -100,8 +100,8 @@ def partners(L):
         return ""
     out = []
     for i in items:
-        ok = i.get("image") and (ROOT / i["image"]).exists()
-        inner = f'<img src="/{i["image"]}" alt="{esc(i["name"])}">' if ok else esc(i["name"])
+        inner = (f'<img src="/{i["image"]}" alt="{esc(i["name"])}" onerror="this.replaceWith(this.alt)">'
+                 if i.get("image") else esc(i["name"]))
         out.append(f'<a href="{i["url"]}" target="_blank" rel="noopener" title="{esc(i["name"])}">{inner}</a>')
     return (f'<div class="partners">\n<div class="wrap">\n<h2>{PTITLE[L]}</h2>\n<div class="plist">\n' + "\n".join(out) + '\n</div>\n</div>\n</div>')
 def url(L, key, nid=None):
