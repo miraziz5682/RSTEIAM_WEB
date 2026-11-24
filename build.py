@@ -22,7 +22,7 @@ T = {
   eyebrow="Özbekiston Respublikasi", hero="Filialda sud-tibbiy ekspertizalar ötkaziladi.",
   addr_l="Manzil", hours_l="Iş vaqti", phone_l="Telefon", mail_l="E-mail",
   addr="100037, Toşkent şahar, Mirzo Uluğbek tumani, Alişerobod MFY, Nurli zamin, 6A",
-  hours="8:30 dan 17:00 gaça", callc="(call-markaz)", soon="Tez orada kiritiladi",
+  hours="8:30 dan 17:00 gaça", theme="Yoruğ / qoronği rejim", callc="(call-markaz)", soon="Tez orada kiritiladi",
   sec="Bölimlar", latest="Sönggi yangiliklar", more="Barça yangiliklar", call="Qönğiroq qilish",
   tdesc=dict(about="Filial faoliyati haqida qisqaça ma'lumot.", services="Filialda ötkaziladigan ekspertiza turlari.",
              news="Filial yangiliklari va e'lonlari.", contact="Manzil, iş vaqti va aloqa ma'lumotlari."),
@@ -38,7 +38,7 @@ T = {
   eyebrow="Республика Узбекистан", hero="В филиале проводятся судебно-медицинские экспертизы.",
   addr_l="Адрес", hours_l="Режим работы", phone_l="Телефон", mail_l="E-mail",
   addr="100037, г. Ташкент, Мирзо-Улугбекский район, махалля Алишеробод, Нурли замин, 6А",
-  hours="с 8:30 до 17:00", callc="(колл-центр)", soon="Будет добавлен позже",
+  hours="с 8:30 до 17:00", theme="Светлая / тёмная тема", callc="(колл-центр)", soon="Будет добавлен позже",
   sec="Разделы", latest="Последние новости", more="Все новости", call="Позвонить",
   tdesc=dict(about="Краткая информация о деятельности филиала.", services="Виды проводимых экспертиз.",
              news="Новости и объявления филиала.", contact="Адрес, режим работы и контактные данные."),
@@ -54,7 +54,7 @@ T = {
   eyebrow="Republic of Uzbekistan", hero="The branch carries out forensic medical examinations.",
   addr_l="Address", hours_l="Working hours", phone_l="Phone", mail_l="E-mail",
   addr="100037, Tashkent, Mirzo Ulugbek district, Alisherobod mahalla, Nurli zamin, 6A",
-  hours="8:30 to 17:00", callc="(call center)", soon="Coming soon",
+  hours="8:30 to 17:00", theme="Light / dark mode", callc="(call center)", soon="Coming soon",
   sec="Sections", latest="Latest news", more="All news", call="Call us",
   tdesc=dict(about="A brief overview of the branch's activities.", services="Types of examinations carried out.",
              news="News and announcements of the branch.", contact="Address, working hours and contact details."),
@@ -73,6 +73,15 @@ IC = {
  "fb": '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>'}
 
 esc = html.escape
+MOON = '<svg class="ic ic-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'
+SUN = '<svg class="ic ic-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>'
+HEAD_JS = '<script>try{if(localStorage.getItem("theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>'
+THEME_JS = """<script>
+(function(){var b=document.getElementById("theme");if(!b)return;
+var d=document.documentElement;b.setAttribute("aria-pressed",d.dataset.theme==="dark");
+b.addEventListener("click",function(){var n=d.dataset.theme==="dark"?"light":"dark";d.dataset.theme=n;
+try{localStorage.setItem("theme",n)}catch(e){}b.setAttribute("aria-pressed",n==="dark")});})();
+</script>"""
 PTITLE = {"uz": "Foydali havolalar", "ru": "Полезные ссылки", "en": "Useful links"}
 def find_img(name):
     for ext in ("jpg", "jpeg", "png", "webp"):
@@ -137,13 +146,14 @@ def page(L, key, title, body, alt):
 <meta name="description" content="{esc(org)}. {esc(S["hero"])}">
 <link rel="icon" href="/logo.png">
 <link rel="stylesheet" href="/style.css">
+{HEAD_JS}
 </head>
 <body>
 <header>
 <div class="wrap">
 <a class="brand" href="{url(L, "home")}"><img src="/logo.png" alt="Logo"><span>{S["b1"]}<br>{S["b2"]}</span></a>
 <nav aria-label="Menu">{nav}</nav>
-<div class="lang">{lang}</div>
+<div class="tools"><div class="lang">{lang}</div><button type="button" id="theme" class="theme" aria-label="{S["theme"]}" title="{S["theme"]}">{MOON}{SUN}</button></div>
 </div>
 </header>
 <main>
@@ -153,6 +163,7 @@ def page(L, key, title, body, alt):
 <footer>
 <div class="wrap foot"><span>© 2026 {esc(org)}</span><div class="flinks">{icons}</div></div>
 </footer>
+{THEME_JS}
 </body>
 </html>
 '''
