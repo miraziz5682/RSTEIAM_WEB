@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Lex.uz",
+    "url": "https://lex.uz",
+    "image": "images/links/lex.png"
+  },
+  {
+    "name": "My.gov.uz",
+    "url": "https://my.gov.uz",
+    "image": "images/links/mygov.png"
+  },
+  {
+    "name": "Gov.uz",
+    "url": "https://gov.uz",
+    "image": "images/links/gov.png"
+  },
+  {
+    "name": "President.uz",
+    "url": "https://president.uz",
+    "image": "images/links/president.png"
+  }
+]

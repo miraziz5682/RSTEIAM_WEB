@@ -73,6 +73,28 @@ IC = {
  "fb": '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>'}
 
 esc = html.escape
+PTITLE = {"uz": "Foydali havolalar", "ru": "Полезные ссылки", "en": "Useful links"}
+def find_img(name):
+    for ext in ("jpg", "jpeg", "png", "webp"):
+        if (ROOT / "images" / f"{name}.{ext}").exists():
+            return f"/images/{name}.{ext}"
+def banner(key):
+    u = find_img("bolim-" + key)
+    return f'<div class="wrap bannerwrap"><img class="banner" src="{u}" alt=""></div>\n' if u else ""
+def tile_img(key):
+    u = find_img("bolim-" + key)
+    return f'<img src="{u}" alt="">' if u else ""
+def partners(L):
+    p = ROOT / "links.json"
+    items = json.loads(p.read_text("utf-8")) if p.exists() else []
+    if not items:
+        return ""
+    out = []
+    for i in items:
+        ok = i.get("image") and (ROOT / i["image"]).exists()
+        inner = f'<img src="/{i["image"]}" alt="{esc(i["name"])}">' if ok else esc(i["name"])
+        out.append(f'<a href="{i["url"]}" target="_blank" rel="noopener" title="{esc(i["name"])}">{inner}</a>')
+    return (f'<div class="partners">\n<div class="wrap">\n<h2>{PTITLE[L]}</h2>\n<div class="plist">\n' + "\n".join(out) + '\n</div>\n</div>\n</div>')
 def url(L, key, nid=None):
     base = "" if L == "uz" else "/" + L
     s = SLUG[L][key]
@@ -127,6 +149,7 @@ def page(L, key, title, body, alt):
 <main>
 {body}
 </main>
+{partners(L)}
 <footer>
 <div class="wrap foot"><span>© 2026 {esc(org)}</span><div class="flinks">{icons}</div></div>
 </footer>
@@ -146,7 +169,9 @@ def build():
         if mine:
             home_news = (f'<section class="news">\n<div class="wrap">\n<h2>{S["latest"]}</h2>\n' + "\n".join(card(n, L) for n in mine[:3]) +
                          f'\n<a class="more" href="{url(L, "news")}">{S["more"]}</a>\n</div>\n</section>')
-        tiles = "\n".join(f'<a href="{url(L, k)}"><h3>{S["nav"][k]}</h3><p>{S["tdesc"][k]}</p></a>' for k in KEYS[1:])
+        tiles = "\n".join(f'<a href="{url(L, k)}">{tile_img(k)}<h3>{S["nav"][k]}</h3><p>{S["tdesc"][k]}</p></a>' for k in KEYS[1:])
+        hu = find_img("hero")
+        hero_img = f'<img class="photo" src="{hu}" alt="">' if hu else '<img src="/logo.png" alt="Logo">'
         home = f'''<div class="hero">
 <div class="wrap">
 <div>
@@ -155,7 +180,7 @@ def build():
 <p>{S["hero"]}</p>
 <a class="btn" href="{url(L, "services")}">{S["nav"]["services"]}</a><a class="btn alt" href="{url(L, "contact")}">{S["nav"]["contact"]}</a>
 </div>
-<img src="/logo.png" alt="Logo">
+{hero_img}
 </div>
 </div>
 <div class="info"><div class="wrap">
@@ -172,13 +197,13 @@ def build():
 </section>
 {home_news}'''
         write(url(L, "home"), page(L, "home", S["nav"]["home"], home, alt("home")))
-        about = head(S["nav"]["about"]) + '\n<section class="about">\n<div class="wrap">\n' + "".join(f"<p>{p}</p>\n" for p in S["about_p"]) + '</div>\n</section>'
+        about = head(S["nav"]["about"]) + banner("about") + '\n<section class="about">\n<div class="wrap">\n' + "".join(f"<p>{p}</p>\n" for p in S["about_p"]) + '</div>\n</section>'
         write(url(L, "about"), page(L, "about", S["nav"]["about"], about, alt("about")))
-        svc = head(S["nav"]["services"]) + '\n<section class="services">\n<div class="wrap">\n<ul>\n' + "\n".join(f"<li><h3>{a}</h3><p>{b}</p></li>" for a, b in S["svc"]) + '\n</ul>\n</div>\n</section>'
+        svc = head(S["nav"]["services"]) + banner("services") + '\n<section class="services">\n<div class="wrap">\n<ul>\n' + "\n".join(f"<li><h3>{a}</h3><p>{b}</p></li>" for a, b in S["svc"]) + '\n</ul>\n</div>\n</section>'
         write(url(L, "services"), page(L, "services", S["nav"]["services"], svc, alt("services")))
-        news = head(S["nav"]["news"]) + '\n<section class="news">\n<div class="wrap">\n' + "\n".join(card(n, L) for n in mine) + '\n</div>\n</section>'
+        news = head(S["nav"]["news"]) + banner("news") + '\n<section class="news">\n<div class="wrap">\n' + "\n".join(card(n, L) for n in mine) + '\n</div>\n</section>'
         write(url(L, "news"), page(L, "news", S["nav"]["news"], news, alt("news")))
-        contact = head(S["nav"]["contact"]) + f'''
+        contact = head(S["nav"]["contact"]) + banner("contact") + f'''
 <section class="contact">
 <div class="wrap">
 <dl>
